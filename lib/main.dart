@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:twitter/twitter.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert' show JsonDecoder;
+import 'dart:async' show Future;
 
 void main() => runApp(new MyApp());
+
+const String CONSUMER_KEY = 'aHqDDLQUT7s8f3FZH96SI4M2k';
+const String CONSUMER_SECRET = 'tRIKuccCQM16LtCz7PpbuivYIAZ4vhCGPYh8HGQiR5AvOuaKAY';
+const String ACCESS_TOKEN = '298698577-8QLwaGykDiTz111D1iuabdOy6dv2qcfwyqDbW7Sx';
+const String ACCESS_TOKEN_SECRET = 'k2F7u4Q5dlMJC3raanVdA5XQwbHQElIKA0LWdroSPgq2M';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -19,13 +29,13 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new TimeLinePage(title: 'Twitter TimeLine'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class TimeLinePage extends StatefulWidget {
+  TimeLinePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -39,21 +49,95 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _TimeLinePageState createState() => new _TimeLinePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _TimeLinePageState extends State<TimeLinePage> {
+  List _tweets = [];
+  DateFormat _stringToDateTime = new DateFormat('yyyy EEE MMM dd HH:mm:ss Z');
+  DateFormat _dateTimeToString = new DateFormat('yyyy-MM-dd HH:mm:ss');
+  JsonDecoder _decoder = new JsonDecoder();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void _fetchTweets() async {
+    var keys;
+    try {
+      keys = await rootBundle.loadString('assets/twitter_keys.json');
+    } catch (e) {
+      print(e);
+    }
+
+    var keysMap = _decoder.convert(keys);
+
+    Map<String, String> oauth = {
+      'consumerKey': keysMap['consumerKey'],
+      'consumerSecret': keysMap['consumerSecret'],
+      'accessToken': keysMap['accessToken'],
+      'accessSecret': keysMap['accessSecret'],
+    };
+
+    Twitter twitter = new Twitter.fromMap(oauth);
+
+    var response;
+    try {
+      response = await twitter.request('GET', 'statuses/user_timeline.json?screen_name=imassc_official&count=30');
+    } catch (e) {
+      print(e);
+    }
+
+    if (response != null) {
+      var json = _decoder.convert(response.body);
+
+      print('RESPONSE: ');
+      print(json[0]);
+
+      setState(() {
+        _tweets = json.map((item) {
+          List splits = item['created_at'].split(' ');
+          String createdAt = ([splits[5]] + splits.sublist(0, 5)).join(' ');
+
+          return Tweet(
+            item['user']['name'],
+            item['user']['screen_name'],
+            item['text'],
+            createdAt,
+            item['retweet_count'],
+            item['favorite_count'],
+          );
+        }).toList();
+      });
+    }
+  }
+
+  Widget _buildTimeLine() {
+    return new ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return new Divider();
+
+        final index = i ~/ 2;
+
+        return _tweets.length > i ? _buildTweetItem(_tweets[index]) : null;
+      },
+    );
+  }
+
+  Widget _buildTweetItem(Tweet tweet) {
+    String userName = tweet.userName + '@' + tweet.userScreenName;
+    String rtCount = 'RT:' + tweet.retweetCount.toString();
+    String fvCount = ' Fav:' + tweet.favoriteCount.toString();
+    DateTime createdAt = _stringToDateTime.parse(tweet.createdAt);
+
+    return new Center(
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(userName),
+          new Text(tweet.tweet, textScaleFactor: 1.2),
+          new Text(rtCount + fvCount),
+          new Text('Posted: ' + _dateTimeToString.format(createdAt)),
+        ],
+      ),
+    );
   }
 
   @override
@@ -70,40 +154,23 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
       ),
-      body: new Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: new Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug paint" (press "p" in the console where you ran
-          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-          // window in IntelliJ) to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
+      body: _buildTimeLine(),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
+        onPressed: _fetchTweets,
+        tooltip: 'Fetch Tweets',
+        child: new Icon(Icons.update),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class Tweet {
+  Tweet(this.userName, this.userScreenName, this.tweet, this.createdAt, this.retweetCount, this.favoriteCount);
+
+  final String userName;
+  final String userScreenName;
+  final String tweet;
+  final String createdAt;
+  final int retweetCount;
+  final int favoriteCount;
 }

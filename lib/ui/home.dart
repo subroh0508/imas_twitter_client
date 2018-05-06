@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         ? _timeLines[_currentIndex] : null;
     String _title
       = _timeLines.length > _currentIndex
-        ? _contents[_currentIndex]['title'] : null;
+        ? _contents[_currentIndex]['title'] : 'Project IM@S';
 
     return new Scaffold(
       appBar: new AppBar(

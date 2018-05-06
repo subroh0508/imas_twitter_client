@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
 
       _titleList.add(
         new ListTile(
+          leading: new Image.asset('images/${content['icon']}'),
           title: new Text(
             content['title'],
             style: new TextStyle(

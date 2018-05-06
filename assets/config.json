@@ -2,6 +2,7 @@
   "contents": [
     {
       "title": "アイドルマスター",
+      "icon": "mcg_angel.png",
       "twitter_accounts": [
         "imas_anime",
         "imas_columbia"
@@ -9,6 +10,7 @@
     },
     {
       "title": "アイドルマスター ミリオンライブ！",
+      "icon": "million_live.png",
       "twitter_accounts": [
         "imasml_official",
         "imasml_theater",
@@ -17,6 +19,7 @@
     },
     {
       "title": "アイドルマスター シンデレラガールズ",
+      "icon": "cinderella_project.png",
       "twitter_accounts": [
         "imascg_chihiro",
         "imascg_stage"
@@ -24,6 +27,7 @@
     },
     {
       "title": "アイドルマスター シャイニーカラーズ",
+      "icon": "shiny_colors.png",
       "twitter_accounts": [
         "imassc_official",
         "lantis_imasSC"
@@ -31,6 +35,7 @@
     },
     {
       "title": "アイドルマスター SideM",
+      "icon": "m_mas.png",
       "twitter_accounts": [
         "SideM_official",
         "SideM_lantis"

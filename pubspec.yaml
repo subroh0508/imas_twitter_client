@@ -29,6 +29,11 @@ flutter:
   assets:
     - assets/config.json
     - assets/twitter_keys.json
+    - images/mcg_angel.png
+    - images/million_live.png
+    - images/cinderella_project.png
+    - images/shiny_colors.png
+    - images/m_mas.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

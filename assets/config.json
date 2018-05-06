@@ -1,0 +1,40 @@
+{
+  "contents": [
+    {
+      "title": "アイドルマスター",
+      "twitter_accounts": [
+        "imas_anime",
+        "imas_columbia"
+      ]
+    },
+    {
+      "title": "アイドルマスター ミリオンライブ！",
+      "twitter_accounts": [
+        "imasml_official",
+        "imasml_theater",
+        "imas_lantis"
+      ]
+    },
+    {
+      "title": "アイドルマスター シンデレラガールズ",
+      "twitter_accounts": [
+        "imascg_chihiro",
+        "imascg_stage"
+      ]
+    },
+    {
+      "title": "アイドルマスター シャイニーカラーズ",
+      "twitter_accounts": [
+        "imassc_official",
+        "lantis_imasSC"
+      ]
+    },
+    {
+      "title": "アイドルマスター SideM",
+      "twitter_accounts": [
+        "SideM_official",
+        "SideM_lantis"
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:imas_twitter_client/utils/config_loader.dart';
-import 'package:imas_twitter_client/timelines.dart';
+import 'package:imas_twitter_client/ui/timelines.dart';
 
 class Home extends StatelessWidget {
   // This widget is the root of your application.

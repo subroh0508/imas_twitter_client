@@ -1,4 +1,7 @@
 class TwitterAccount {
-  String name;
-  String screenName;
+  TwitterAccount(this.name, this.screenName, this.iconUrl);
+
+  final String name;
+  final String screenName;
+  final String iconUrl;
 }

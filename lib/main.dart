@@ -5,6 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert' show JsonDecoder;
 import 'dart:async' show Future;
 
-import 'package:imas_twitter_client/home.dart';
+import 'package:imas_twitter_client/ui/home.dart';
 
 void main() => runApp(new Home());

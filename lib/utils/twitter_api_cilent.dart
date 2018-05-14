@@ -6,7 +6,7 @@ import 'dart:async' show Future;
 import 'package:imas_twitter_client/model/tweet.dart';
 
 class TwitterApiClient {
-  final JsonDecoder _decoder = JsonDecoder();
+  final JsonDecoder _decoder = new JsonDecoder();
   final DateFormat _stringToDateTime = new DateFormat('yyyy EEE MMM dd HH:mm:ss Z');
 
   Twitter _twitter;
@@ -128,7 +128,7 @@ class TwitterApiClient {
       int end = i >= entityList.length ? runes.length - 1 : entityList[i].start;
 
       if (start < end) {
-        String text = String.fromCharCodes(runes.toList().getRange(start, end));
+        String text = new String.fromCharCodes(runes.toList().getRange(start, end));
         
         plains.add(new PlainText(text, start, end));
       }

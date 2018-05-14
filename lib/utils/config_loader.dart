@@ -11,6 +11,6 @@ class ConfigLoader {
       return new Future.error(error);
     }
 
-    return new Future.value(JsonDecoder().convert(json)[key]);
+    return new Future.value(new JsonDecoder().convert(json)[key]);
   }
 }

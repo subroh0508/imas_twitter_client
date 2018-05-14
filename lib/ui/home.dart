@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    ConfigLoader().load('contents')
+    new ConfigLoader().load('contents')
       .then((contents) {
         _contents = contents;
         _timeLines = _createTimeLineContainers();
